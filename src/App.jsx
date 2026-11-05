@@ -24,25 +24,39 @@ import {
   Sunrise,
   Sunset
 } from 'lucide-react';
-import { useStore } from './store/useStore';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  toggleUnit,
+  setActiveLocationId,
+  searchCities,
+  loadLocation
+} from './redux/weatherSlice';
 
 export default function App() {
-  const {
-    unit,
-    toggleUnit,
-    locations,
-    activeLocationId,
-    setActiveLocationId,
-    convertTemp,
-    searchCities,
-    searchResults,
-    searchLoading,
-    searchError,
-    loadLocation,
-    loading,
-    error,
-    lastUpdated
-  } = useStore();
+const dispatch = useDispatch();
+
+const {
+  unit,
+  locations,
+  activeLocationId,
+  searchResults,
+  searchLoading,
+  searchError,
+  loading,
+  error,
+  lastUpdated
+} = useSelector((state) => state.weather);
+
+const convertTemp = (tempC) => {
+  if (tempC == null) return '--';
+
+  if (unit === 'F') {
+    return Math.round((tempC * 9) / 5 + 32);
+  }
+
+  return Math.round(tempC);
+};
 
   const [activeRadarLayer, setActiveRadarLayer] = useState('precipitation');
   const [radarPlaying, setRadarPlaying] = useState(true);
@@ -50,30 +64,30 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    if (!locations.length) {
-      loadLocation({
-        id: 'default-new-delhi',
-        name: 'New Delhi',
-        latitude: 28.6139,
-        longitude: 77.2090,
-        country: 'India',
-        country_code: 'IN'
-      });
-    }
-  }, [locations.length, loadLocation]);
+  if (!locations.length) {
+    dispatch(loadLocation({
+      id: 'default-new-delhi',
+      name: 'New Delhi',
+      latitude: 28.6139,
+      longitude: 77.2090,
+      country: 'India',
+      country_code: 'IN'
+    }));
+  }
+}, [locations.length, dispatch]);
 
   const activeLoc = locations.find((l) => l.id === activeLocationId) || locations[0];
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    await searchCities(query);
+    await dispatch(searchCities(query));
     setSearchOpen(true);
   };
 
   const chooseCity = async (city) => {
     setQuery(city.name);
     setSearchOpen(false);
-    await loadLocation(city);
+    await dispatch(loadLocation(city));
   };
 
   const getConditionIcon = (iconName) => {
@@ -146,12 +160,12 @@ export default function App() {
           <div className="flex items-center gap-2 shrink-0">
             <div className="flex items-center gap-1.5 bg-black/20 p-1 rounded-2xl border border-white/20 text-xs font-semibold max-w-[260px] overflow-x-auto">
               {locations.map((loc) => (
-                <button key={loc.id} onClick={() => setActiveLocationId(loc.id)} className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap ${activeLocationId === loc.id ? 'bg-white text-slate-900 font-bold shadow-md' : 'text-white/80 hover:text-white'}`}>
+                <button key={loc.id} onClick={() => dispatch(setActiveLocationId(loc.id))} className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap ${activeLocationId === loc.id ? 'bg-white text-slate-900 font-bold shadow-md' : 'text-white/80 hover:text-white'}`}>
                   {loc.city}
                 </button>
               ))}
             </div>
-            <button onClick={toggleUnit} className="px-3.5 py-1.5 bg-white/20 hover:bg-white/30 border border-white/30 rounded-xl font-mono text-xs font-black transition shadow-sm">°{unit}</button>
+            <button onClick={() => dispatch(toggleUnit())} className="px-3.5 py-1.5 bg-white/20 hover:bg-white/30 border border-white/30 rounded-xl font-mono text-xs font-black transition shadow-sm">°{unit}</button>
           </div>
         </div>
       </header>
@@ -160,7 +174,7 @@ export default function App() {
         {error && (
           <div className="glass-panel p-4 rounded-3xl border-l-4 border-red-400 flex items-center justify-between gap-3 shadow-xl" role="alert">
             <div className="flex items-center gap-3 text-xs"><AlertCircle className="w-6 h-6 text-red-300 shrink-0" /><span>{error}</span></div>
-            <button onClick={() => activeLoc && loadLocation(activeLoc)} className="text-xs font-bold underline">Retry</button>
+            <button onClick={() => activeLoc && dispatch(loadLocation(activeLoc))} className="text-xs font-bold underline">Retry</button>
           </div>
         )}
 

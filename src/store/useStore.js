@@ -4,37 +4,29 @@ const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 const AIR_QUALITY_URL = 'https://air-quality-api.open-meteo.com/v1/air-quality';
 
-const WEATHER_CODES = {
-  0: ['Clear sky', 'Sun'],
-  1: ['Mainly clear', 'Sun'],
-  2: ['Partly cloudy', 'CloudSun'],
-  3: ['Overcast', 'Cloud'],
-  45: ['Fog', 'Cloud'],
-  48: ['Depositing rime fog', 'Cloud'],
-  51: ['Light drizzle', 'CloudRain'],
-  53: ['Moderate drizzle', 'CloudRain'],
-  55: ['Dense drizzle', 'CloudRain'],
-  56: ['Light freezing drizzle', 'CloudRain'],
-  57: ['Dense freezing drizzle', 'CloudRain'],
-  61: ['Slight rain', 'CloudRain'],
-  63: ['Moderate rain', 'CloudRain'],
-  65: ['Heavy rain', 'CloudRain'],
-  66: ['Light freezing rain', 'CloudRain'],
-  67: ['Heavy freezing rain', 'CloudRain'],
-  71: ['Slight snow', 'CloudRain'],
-  73: ['Moderate snow', 'CloudRain'],
-  75: ['Heavy snow', 'CloudRain'],
-  77: ['Snow grains', 'CloudRain'],
-  80: ['Slight rain showers', 'CloudRain'],
-  81: ['Moderate rain showers', 'CloudRain'],
-  82: ['Violent rain showers', 'CloudRain'],
-  85: ['Slight snow showers', 'CloudRain'],
-  86: ['Heavy snow showers', 'CloudRain'],
-  95: ['Thunderstorm', 'CloudRain'],
-  96: ['Thunderstorm with hail', 'CloudRain'],
-  99: ['Thunderstorm with heavy hail', 'CloudRain']
-};
+const dispatch = useDispatch();
 
+const {
+    unit,
+    locations,
+    activeLocationId,
+    searchResults,
+    searchLoading,
+    searchError,
+    loading,
+    error,
+    lastUpdated
+} = useSelector((state) => state.weather);
+
+const convertTemp = (tempC) => {
+    if (tempC == null) return '--';
+
+    if (unit === 'F') {
+        return Math.round((tempC * 9) / 5 + 32);
+    }
+
+    return Math.round(tempC);
+};
 const getWeatherInfo = (code) => WEATHER_CODES[code] || ['Unknown conditions', 'Cloud'];
 
 const getWindDirection = (degrees) => {
