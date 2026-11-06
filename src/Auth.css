@@ -1,0 +1,114 @@
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: linear-gradient(135deg, #071426, #102c50, #263b70);
+    font-family: Arial, sans-serif;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 32px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.auth-logo {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.auth-card h1 {
+    color: #102c50;
+    font-size: 25px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-card input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    background: #f8fafc;
+}
+
+.auth-card input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.auth-card form button {
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auth-card form button:hover {
+    background: #1d4ed8;
+}
+
+.auth-card button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-message {
+    margin-top: 16px;
+    color: #dc2626;
+    font-size: 14px;
+}
+
+.auth-switch {
+    margin-top: 24px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.auth-switch button {
+    margin-left: 6px;
+    border: none;
+    background: none;
+    color: #2563eb;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auth-footer {
+    margin-top: 30px;
+    color: #94a3b8;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 32px 22px;
+    }
+}
