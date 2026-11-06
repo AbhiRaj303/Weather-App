@@ -15,6 +15,8 @@ app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }));
+
+// Check environment variables
 app.get("/api/check-env", (req, res) => {
     res.json({
         mongoUriExists: !!process.env.MONGO_URI,
@@ -22,6 +24,7 @@ app.get("/api/check-env", (req, res) => {
         clientUrlExists: !!process.env.CLIENT_URL
     });
 });
+
 // Reuse MongoDB connection
 let cached = global.mongoose;
 
@@ -59,12 +62,12 @@ app.use(async (req, res, next) => {
         await connectDB();
         next();
     } catch (error) {
-        console.error("Database connection failed:", error);
+        console.error("Database connection failed:", error.message);
 
-res.status(500).json({
-    message: "Database connection failed",
-    error: error.message
-});
+        res.status(500).json({
+            message: "Database connection failed",
+            error: error.message
+        });
     }
 });
 

@@ -4,7 +4,14 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 
 import App from "./App.jsx";
-import { store } from "./redux/store";
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+    toggleUnit,
+    setActiveLocationId,
+    searchCities,
+    loadLocation
+} from './redux/weatherSlice';
 
 import "./index.css";
 
