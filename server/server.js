@@ -15,7 +15,13 @@ app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }));
-
+app.get("/api/check-env", (req, res) => {
+    res.json({
+        mongoUriExists: !!process.env.MONGO_URI,
+        jwtSecretExists: !!process.env.JWT_SECRET,
+        clientUrlExists: !!process.env.CLIENT_URL
+    });
+});
 // Reuse MongoDB connection
 let cached = global.mongoose;
 
